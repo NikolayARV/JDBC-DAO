@@ -1,6 +1,6 @@
 package Hibernate;
 
-import modelHibernate.EmployeeHibernate;
+import modelHibernate.CityHibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,93 +8,90 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class EmployeeDAOImplHibernate implements EmployeeDAOHibernate {
-    final String user = "postgres";
-    final String password = "Zxc13579";
-    final String url = "jdbc:postgresql://localhost:5432/skypro";
-
+public class CityDAOHibernateImpl implements CityDAOHibernate {
     @Override
-    public List<EmployeeHibernate> getAllEmployes() {
-
+    public void add(CityHibernate city) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        String jpqlQuery = "select e from EmployeeHibernate e";
-        TypedQuery<EmployeeHibernate> query = entityManager.createQuery(jpqlQuery, EmployeeHibernate.class);
-        List<EmployeeHibernate> employeeHibernates = query.getResultList();
+        entityManager.persist(city);
+       // String jpqlQuery = "INSERT INTO city Values (?)";
+        //
+        //        TypedQuery<CityHibernate> query = entityManager.createQuery(jpqlQuery, CityHibernate.class);
+        //        query.setParameter("1", city.getName());
+
+
         entityManager.getTransaction().commit();
         entityManager.close();
         entityManagerFactory.close();
-        return employeeHibernates;
+
     }
 
     @Override
-    public EmployeeHibernate getEmployeeById(int id) {
+    public CityHibernate getById(int id) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        String jpqlQuery = "select e from EmployeeHibernate e where e.id =: a";
-        TypedQuery<EmployeeHibernate> query = entityManager.createQuery(jpqlQuery, EmployeeHibernate.class);
+        String jpqlQuery = "select c from CityHibernate c where c.id =: a";
+        TypedQuery<CityHibernate> query = entityManager.createQuery(jpqlQuery, CityHibernate.class);
         query.setParameter("a", id);
-        EmployeeHibernate employeeHibernate = query.getSingleResult();
+        CityHibernate city = query.getSingleResult();
         entityManager.getTransaction().commit();
         entityManager.close();
         entityManagerFactory.close();
-        return employeeHibernate;
+        return city;
     }
 
     @Override
-    public void createEmployee(EmployeeHibernate employeeHibernate) {
+    public List<CityHibernate> getAllCities() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        entityManager.persist(employeeHibernate);
-
+        String jpqlQuery = "select c from CityHibernate c";
+        TypedQuery<CityHibernate> query = entityManager.createQuery(jpqlQuery, CityHibernate.class);
+        List<CityHibernate> cityes = query.getResultList();
         entityManager.getTransaction().commit();
         entityManager.close();
         entityManagerFactory.close();
-
+        return cityes;
     }
 
     @Override
-    public void updateEmployee(EmployeeHibernate employeeHibernate, int id) {
+    public void deleteCity(CityHibernate city, int id) {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        String jpqlQuery = "UPDATE EmployeeHibernate e SET name = (?), lastname = (?), gender = (?), age = (?), city = (?) WHERE id =(?)";
+        String jpqlQuery = "DELETE FROM CityHibernate c WHERE c.id =: d";
 
-        TypedQuery<EmployeeHibernate> query = entityManager.createQuery(jpqlQuery, EmployeeHibernate.class);
-        query.setParameter("1", employeeHibernate.getName());
-        query.setParameter("2", employeeHibernate.getLastname());
-        query.setParameter("3", employeeHibernate.getGender());
-        query.setParameter("4", employeeHibernate.getAge());
-        query.setParameter("5", employeeHibernate.getCity());
-        query.setParameter("6", id);
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        entityManagerFactory.close();
-    }
-
-    @Override
-    public void deleteEmployee(int id) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-        entityManager.getTransaction().begin();
-        String jpqlQuery = "DELETE FROM EmployeeHibernate e WHERE e.id =: d";
-
-        TypedQuery<EmployeeHibernate> query = entityManager.createQuery(jpqlQuery, EmployeeHibernate.class);
+        TypedQuery<CityHibernate> query = entityManager.createQuery(jpqlQuery, CityHibernate.class);
         query.setParameter("d", id);
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+        entityManagerFactory.close();
+    }
+
+    @Override
+    public void updateCity(CityHibernate city, int id) {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
+
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        entityManager.getTransaction().begin();
+
+        String jpqlQuery = "UPDATE CityHibernate c SET name = (?) WHERE id =(?)";
+
+        TypedQuery<CityHibernate> query = entityManager.createQuery(jpqlQuery, CityHibernate.class);
+        query.setParameter("1", city.getName());
+        query.setParameter("2", id);
 
         entityManager.getTransaction().commit();
         entityManager.close();
