@@ -22,8 +22,9 @@ public class EmployeeHibernate {
     private String lastname;
     private String gender;
     private int age;
-   @ManyToOne (fetch = FetchType.LAZY) //LAZY т.к. мне пока непонятна необходимость мгновенной подгрузки городов
-   //и я не хочу перегружать приложение лишними запросами к БД
+
+   @ManyToOne (fetch = FetchType.EAGER) //LAZY т.к. мне пока непонятна необходимость мгновенной подгрузки городов
+                                       //и я не хочу перегружать приложение лишними запросами к БД
    @JoinColumn(name = "city_id")
 
     private CityHibernate city;
@@ -34,5 +35,6 @@ public class EmployeeHibernate {
         this.gender = gender;
         this.age = age;
         this.city = city;
+
     }
 }

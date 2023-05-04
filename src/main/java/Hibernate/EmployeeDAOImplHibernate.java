@@ -49,12 +49,14 @@ public class EmployeeDAOImplHibernate implements EmployeeDAOHibernate {
 
     @Override
     public void createEmployee(EmployeeHibernate employeeHibernate) {
+
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myPersistenceUnit");
 
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
         entityManager.persist(employeeHibernate);
+
 
         entityManager.getTransaction().commit();
         entityManager.close();
@@ -69,15 +71,18 @@ public class EmployeeDAOImplHibernate implements EmployeeDAOHibernate {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
-        String jpqlQuery = "UPDATE EmployeeHibernate e SET name = (?), lastname = (?), gender = (?), age = (?), city = (?) WHERE id =(?)";
+        String jpqlQuery = "UPDATE EmployeeHibernate e SET name =:n, lastname =:l, gender =:g, age =:a, city =:c WHERE e.id =:d";
 
-        TypedQuery<EmployeeHibernate> query = entityManager.createQuery(jpqlQuery, EmployeeHibernate.class);
-        query.setParameter("1", employeeHibernate.getName());
-        query.setParameter("2", employeeHibernate.getLastname());
-        query.setParameter("3", employeeHibernate.getGender());
-        query.setParameter("4", employeeHibernate.getAge());
-        query.setParameter("5", employeeHibernate.getCity());
-        query.setParameter("6", id);
+        entityManager.createQuery(jpqlQuery)
+                        .setParameter("n", employeeHibernate.getName())
+                        .setParameter("l", employeeHibernate.getLastname())
+                        .setParameter("g", employeeHibernate.getGender())
+                        .setParameter("a", employeeHibernate.getAge())
+                        .setParameter("c", employeeHibernate.getCity())
+                        .setParameter("d", id)
+                      .executeUpdate();
+
+
 
         entityManager.getTransaction().commit();
         entityManager.close();
