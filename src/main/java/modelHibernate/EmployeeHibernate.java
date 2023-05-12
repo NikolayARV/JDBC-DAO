@@ -7,7 +7,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode (exclude = {"id"})
 @Getter
 @Setter
 @Entity
@@ -22,15 +22,19 @@ public class EmployeeHibernate {
     private String lastname;
     private String gender;
     private int age;
-    @Column(name = "city_id")
 
-    private int cityId;
+   @ManyToOne (fetch = FetchType.EAGER) //LAZY т.к. мне пока непонятна необходимость мгновенной подгрузки городов
+                                       //и я не хочу перегружать приложение лишними запросами к БД
+   @JoinColumn(name = "city_id")
 
-    public EmployeeHibernate(String name, String lastname, String gender, int age, int cityId) {
+    private CityHibernate city;
+
+    public EmployeeHibernate(String name, String lastname, String gender, int age, CityHibernate city) {
         this.name = name;
         this.lastname = lastname;
         this.gender = gender;
         this.age = age;
-        this.cityId = cityId;
+        this.city = city;
+
     }
 }

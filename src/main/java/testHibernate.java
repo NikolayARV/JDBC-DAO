@@ -14,7 +14,7 @@ public class testHibernate {
             System.out.println(employeeHibernate.getLastname());
             System.out.println(employeeHibernate.getGender());
             System.out.println(employeeHibernate.getAge());
-            System.out.println(employeeHibernate.getCityId());
+            System.out.println(employeeHibernate.getCity());
 
             System.out.println(employeeDAOHibernate.getEmployeeById(14));
 
